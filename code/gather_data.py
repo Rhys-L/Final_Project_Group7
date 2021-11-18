@@ -93,6 +93,36 @@ clean = clean.rename(columns={"Year_x": "Year", "Day_x":"Day", "Lake_x":"Lake", 
 
 clean.to_csv("Ice_SurfaceTemp_LongTidy.csv")
 
+#Create df with Lake physical characteristics from this page in the NOAA site: https://coastwatch.glerl.noaa.gov/statistic/physical.html
+
+lake_properties = { 'Elevation_meters' : [183, 176, 176, 173, 74],
+         'Length_km' : [563, 494, 332, 388, 311],
+         'Breadth_km' : [257, 190, 245, 92, 85],
+         'Avg_Depth_meters' : [147, 85, 59, 19, 86],
+         'Max_Depth_meters' : [406, 282, 229, 64, 244],
+         'Volume_km3' : [12100, 4920, 3540, 484, 1640],
+         'Water_Area_km2': [82100, 57800, 59600, 25700, 18960],
+         'Land_Drain_Area_km2' : [127700, 118000, 134100, 78000, 64030],
+         'Total_Area_km2' : [209800, 175800, 193700, 103700, 82990],
+         'Shore_Length_km' : [4385, 2633, 6157, 1402, 1146],
+         'Retention_Time_years': [191, 99, 22, 2.6, 6]
+
+
+}
+df_lake_properties = pd.DataFrame(lake_properties, index = ['Sup.',
+                                 'Mich.',
+                                 'Huron',
+                                 'Erie',
+                                 'Ont.'])
+
+
+df_lake_properties['Lake'] = ['Sup.', 'Mich.', 'Huron', 'Erie', 'Ont.']
+
+full_df = pd.merge(df_lake_properties, clean, on='Lake', how = 'outer')
+full_df = full_df.drop(columns = ['Unnamed: 0'])
+
+full_df.to_csv("LakeIce_PhysicalProps.csv")
+
 """ 
 temp_urls = ['https://coastwatch.glerl.noaa.gov/ftp/glsea/avgtemps/2008/glsea-temps2008_1024.dat',
              'https://coastwatch.glerl.noaa.gov/ftp/glsea/avgtemps/2009/glsea-temps2009_1024.dat',
