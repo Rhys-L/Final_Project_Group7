@@ -96,18 +96,18 @@ plt.plot(range(1, 50), Error, color = 'blue', linestyle = 'dotted', marker = 'o'
 plt.title('Error based on K Value Selection')
 plt.xlabel('K')
 plt.ylabel('Mean Error')
-plt.figtext(x = .5, y = .5, s = 'k = 12 is optimal', backgroundcolor = 'blue', color = 'white')
+plt.figtext(x = .5, y = .5, s = 'k = 23 is optimal', backgroundcolor = 'blue', color = 'white')
 plt.show()
 
-# Build new model with optimal k = 12
+# Build new model with optimal k = 23
 
-classifier = KNeighborsClassifier(n_neighbors = 12)
+classifier = KNeighborsClassifier(n_neighbors = 23)
 classifier.fit(X_train, Y_train)
 Y_preds12 = classifier.predict(X_test)
 print(classification_report(Y_test, Y_preds12)) #best precision was St. Claire again
 cf_matrix = confusion_matrix(Y_test, Y_preds12)
 print(cf_matrix)
-print(accuracy_score(Y_test, Y_preds12) * 100) #37% accuracy
+print(accuracy_score(Y_test, Y_preds12) * 100) #39% accuracy
 
 # Heatmap, adapted from Prof. Amir's KNN example
 
@@ -123,3 +123,28 @@ plt.tight_layout()
 plt.show()
 
 # ------------------------------------------
+
+# GUI IMPLEMENTATION
+
+from tkinter import *
+root = Tk()
+root.title('KNN Error Calculator')
+
+e = Entry(root, width=35)
+e.pack()
+
+def myClick():
+    user_input = eval(e.get())
+
+    GUIclassifier = KNeighborsClassifier(n_neighbors=user_input)
+    GUIclassifier.fit(X_train, Y_train)
+    GUI_preds = GUIclassifier.predict(X_test)
+    accuracy = accuracy_score(Y_test, GUI_preds) * 100
+    GUIstring = "The accuracy percentage for your chosen k-value is " + str(round(accuracy, 2)) + "%."
+    myLabel = Label(root, text=GUIstring)
+    myLabel.pack()
+
+myButton = Button(root, text= "Enter k value", command=myClick)
+myButton.pack()
+
+root.mainloop()
