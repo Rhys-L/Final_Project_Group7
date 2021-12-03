@@ -16,9 +16,10 @@ np.random.seed(2021)
 
 # ------------------------------------------
 
-# IMPORT DATA
+# IMPORT DATA FROM GCP BITBUCKET
+url = 'https://storage.googleapis.com/great_lakes/LakeIce_PhysicalProps.csv'
 
-lakedata = pd.read_csv('lakedata.csv')
+lakedata = pd.read_csv(url)
 print(lakedata.head(5))
 print(lakedata.columns)
 print(lakedata.dtypes)
