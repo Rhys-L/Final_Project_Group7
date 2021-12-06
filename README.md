@@ -25,8 +25,9 @@ The code subdirectory contains several .py files additional details can be found
 - Project-6103-logit.py predicts whether ice concentration exceeds the longterm average based on surface temperature and displays errors in a tkinter GUI.
 
 ### Group Reports & Presentations
-- Final-Group-Project-Report:
-- Group-Proposal:
+- Final-Group-Project-Report: A final written report on our findings and methodology.
+- Group-Proposal: The intial proposal we developed and iterated on for this project.
+- Final-Group-Presentation: a pdf version of the ppt presentation we delivered in class on 12/6/2021.
 
 ### Individual Reports 
 - carter-rogers-individual-project: report and code written by Carter.
