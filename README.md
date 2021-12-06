@@ -11,19 +11,21 @@ Our goal for this project is to utilize data mining techniques and algorithms to
     - We achieved this through a KNN model that clusters characterists by lake.  
 
 
-## Repo Structure
+# Repo Structure
 
 The following repositories contain reports, documents, and presentations that outline our findings and modeling approach.
 
-# Group Reports & Presentations
+
+### Code
+    
+- The code subdirectory contains several .py files to gather data from the Great Lakes, conduct EDA, build models, and GUI. For additional details, please refer to the ReadME within the code folder. 
+
+### Group Reports & Presentations
 - Final-Group-Project-Report:
 - Group-Proposal:
 
-# Individual Reports 
+### Individual Reports 
 - carter-rogers-individual-project: report and code written by Carter.
 - rhys-leahy-individual-project: report and code written by Rhys.
 - nongjie-individual-project: report and code written by Nongjie.
 
-# Code
-    
-- The code subdirectory contains several .py files to gather data from the Great Lakes, conduct EDA, build models, and GUI. For additional details, please refer to the ReadME within the code folder. 
