@@ -1,13 +1,19 @@
 """
-Script to get and clean data from
-1. Function to query
-Driver code goes through following steps.
-1.
-2.
-3.
-4.
+Script to get and clean data from NOOA. This script is unfortunately prone to connection and timeout errors depending
+on the computer and time of day/response speed from NOAA and GLERL. To bypass these errors, the results of this code
+(output table from final df in line 147) are stored here on a GCP storage bucket:
+'https://storage.googleapis.com/great_lakes/LakeIce_PhysicalProps.csv'
 
-Results of this code are stored here on BigQuery:
+Both functions (lines 23 - 51) query and clean data from .dat files on web servers.
+
+Driver code goes through following steps.
+1. Calls get_ice_concentration on a list of urls to .dat files containing ice concentration.
+2. Reshapes ice DataFrame to tidy long format and appends new id column to merge with additional datasets.
+3. Calls get_surface_temp on a urls to .dat files containing temp. Joins response objects into master temperature df.
+4. Merges temperature and ice dataframes. Removes duplicated columns.
+5. Creates DataFrame of physical properties of Great Lakes.
+6. Exports a csv with the full dataset.
+
 """
 
 import pandas as pd
@@ -15,19 +21,20 @@ import requests
 import time
 
 def get_ice_concentration(url):
-    """Takes in a url to a .dat file as an argument. Returns a df of clean data from the web hosted file."""
+    """Takes a url to a .dat file as an argument. Returns a df of clean data from the web hosted file."""
     res = requests.get(url, timeout=(10, 30))
+    time.sleep(1)
     rows = []
     data = res.text[304:].splitlines() #strips header. creates list of lists containing rows of ice data.
     for i in range(len(data)):
-        clean_row = [value for value in data[i].split(' ') if value]  #cleans spaces so row only contains values.
+        clean_row = [value for value in data[i].split(' ') if value]  #cleans white spaces so row only contains values.
         rows.append(clean_row)
     df = pd.DataFrame(rows, columns=['Year', 'Day', 'Sup.', 'Mich.', 'Huron', 'Erie', 'Ont.', 'St.Clr', 'GL Total'],
                       dtype=float)
     return df
 
 def get_surface_temp(url):
-    """Takes in a url to a .dat file as an argument. Returns a df of clean data from the web hosted file."""
+    """Takes a url to a .dat file as an argument. Returns a df of clean data from the web hosted file."""
     try:
         res = requests.get(url, timeout=(60, 180))
     except requests.exceptions.ConnectionError as errc:
@@ -37,7 +44,7 @@ def get_surface_temp(url):
     rows = []
     data = res.text[348:].splitlines() #strips header. creates list of lists containing rows of ice data.
     for i in range(len(data)):
-        clean_row = [value for value in data[i].split(' ') if value]  #cleans spaces so row only contains values.
+        clean_row = [value for value in data[i].split(' ') if value]  #cleans white spaces so row only contains values.
         rows.append(clean_row)
     df = pd.DataFrame(rows, columns=['Year', 'Day', 'Sup.', 'Mich.', 'Huron', 'Erie', 'Ont.', 'St.Clr'],
                       dtype=float)
@@ -107,8 +114,8 @@ if __name__ == "__main__":
     # Merges ice values to temperature dataset on common id structured 'year_day_lake.
     messy_dataset = pd.merge(temp, ice, on='id', how='outer')
 
-    # Great lakes total values only exist in the ice (right merged) df. This replaces all missing in the columns we keep with
-    # values from the right merged data.
+    # Great lakes total values only exist in the ice (right merged) df.
+    # This replaces all missing in the columns we keep with values from the right merged data.
     messy_dataset.Year_x.fillna(messy_dataset.Year_y, inplace=True)
     messy_dataset.Day_x.fillna(messy_dataset.Day_y, inplace=True)
     messy_dataset.Lake_x.fillna(messy_dataset.Lake_y, inplace=True)
@@ -131,9 +138,8 @@ if __name__ == "__main__":
                        'Land_Drain_Area_km2': [127700, 118000, 134100, 78000, 64030],
                        'Total_Area_km2': [209800, 175800, 193700, 103700, 82990],
                        'Shore_Length_km': [4385, 2633, 6157, 1402, 1146],
-                       'Retention_Time_years': [191, 99, 22, 2.6, 6]
+                       'Retention_Time_years': [191, 99, 22, 2.6, 6]}
 
-                       }
     df_lake_properties = pd.DataFrame(lake_properties, index=['Sup.',
                                                               'Mich.',
                                                               'Huron',
@@ -143,7 +149,6 @@ if __name__ == "__main__":
     df_lake_properties['Lake'] = ['Sup.', 'Mich.', 'Huron', 'Erie', 'Ont.']
 
     full_df = pd.merge(df_lake_properties, clean, on='Lake', how='outer')
-    full_df = full_df.drop(columns=['Unnamed: 0'])
 
     full_df.to_csv("LakeIce_PhysicalProps.csv")
 
