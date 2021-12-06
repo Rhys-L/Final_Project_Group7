@@ -18,7 +18,11 @@ The following repositories contain reports, documents, and presentations that ou
 
 ### Code
     
-- The code subdirectory contains several .py files additional details can be found in the code directory's readme.(code/README.md) The file gather_data.py wrangles data from multiple NOAA and GLERL files on the Great Lakes. conduct EDA, build models, and GUI. For additional details, please refer to the ReadME within the code folder. 
+The code subdirectory contains several .py files additional details can be found in the code directory's readme(code/README.md). 
+- The file gather_data.py wrangles data from multiple NOAA and GLERL files on the Great Lakes. 
+- KNN_Modeling.py conducts intial EDA on the full dataset, builds a clustering model, and produces a tkinter based GUI to explore how the model performs with different k-values.  
+- Project-6103_lm.py conducts initial EDA on the dataset and establishes a threshold of longterm average ice concentration.
+- Project-6103-logit.py predicts whether ice concentration exceeds the longterm average based on surface temperature and displays errors in a tkinter GUI.
 
 ### Group Reports & Presentations
 - Final-Group-Project-Report:
