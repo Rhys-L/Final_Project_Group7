@@ -18,7 +18,7 @@ The following repositories contain reports, documents, and presentations that ou
 
 ### Code
     
-The code subdirectory contains several .py files additional details can be found in the [code directory's readme](main/code/README.MD). 
+The code subdirectory contains several .py files additional details can be found in the [code directory's readme](https://github.com/Rhys-L/Final_Project_Group7/blob/main/code/README.MD). 
 - The file gather_data.py wrangles data from multiple NOAA and GLERL files on the Great Lakes. 
 - KNN_Modeling.py conducts intial EDA on the full dataset, builds a clustering model, and produces a tkinter based GUI to explore how the model performs with different k-values.  
 - Project-6103_lm.py conducts initial EDA on the dataset and establishes a threshold of longterm average ice concentration.
